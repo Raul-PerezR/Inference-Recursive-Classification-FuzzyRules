@@ -1,0 +1,19 @@
+# Legend of each column of the software output in its longest column
+ 1. Name of the database
+ 2. Number of labels used in the fuzzy domain definition.
+ 3. Number of continuous variables
+ 4. Global number of examples
+ 5. Global number of patterns obtained using all examples.
+ 6. Overall Hit Percentage
+ 7. Overall Error Percentage
+ 8. Average Percentage of success in cross validation
+ 9. Average Percentage of correctness without considering those not covered in the cross validation.
+10. Average error rate (not considering the examples not covered) in cross validation 
+11. Mean percentage of examples not covered in the cross validation
+12.Average time consumed by the learning process in cross validation
+13. Average time consumed by the inference process in real time.
+14. Average time consumed by the inference process in CPU consumption time.
+15. Average percentage in which the type of rule that triggers in the classical and non-classical i nference and non-classical in the cross validation.
+16. Average percentage of the rule type that matches the rule that triggers in the classical inference and the non-classical in the cross validation 16.
+ and the non-classical one in cross-validation
+
