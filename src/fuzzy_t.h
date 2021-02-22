@@ -6,13 +6,13 @@ using namespace std;
 
 class fuzzy_t {
    private:
-     static const double MISSING=-999999999;
+     static constexpr double MISSING=-999999999;
      double a;
      double b;
      double c;
      double d;
      bool menosinfinito; // true = b es menos infinito
-     bool masinfinito;   // true = c es más infinito
+     bool masinfinito;   // true = c es mï¿½s infinito
      string nombre;      // nombre de la etiqueta
    public:
      /**
@@ -24,7 +24,7 @@ class fuzzy_t {
 
 
      /**
-     @brief Constructor de la clase fuzzy_t que añade los puntos de definiciòn de la
+     @brief Constructor de la clase fuzzy_t que aï¿½ade los puntos de definiciï¿½n de la
             etiqueta y el nombre de la misma.
      @param a (real) indica el extremo inferior del trapecio [Posibilidad(a)=0].
      @param b (real) indica el punto centro inferior del trapecio [Posibilidad(b)=1].
@@ -38,7 +38,7 @@ class fuzzy_t {
 
 
      /**
-     @brief Constructor de la clase fuzzy_t que añade los puntos de definiciòn de la
+     @brief Constructor de la clase fuzzy_t que aï¿½ade los puntos de definiciï¿½n de la
             etiqueta, el nombre de la misma y si el extremo superior o inferior de la misma
 	    es infinito.
      @param a (real) indica el extremo inferior del trapecio [Posibilidad(a)=0].
@@ -48,7 +48,7 @@ class fuzzy_t {
      @param name (string) nombre de la etiqueta trapezoidal definida.
      @param menos (bool) indica si el extremo inferior de la etiqueta es menos infinito.
             [-inf,-inf,c,d,"name"]
-     @param mas (bool) indica si el extremo superior de la etiqueta es más infinito.
+     @param mas (bool) indica si el extremo superior de la etiqueta es mï¿½s infinito.
             [a,b,+inf,+inf,"name"]
 
      Crea un objeto de tipo fuzzy_t, con definicion [a,b,c,d,"name",menos,mas]
@@ -57,22 +57,22 @@ class fuzzy_t {
  bool mas);
 
      /**
-     @brief Constructor de copía de los objetos fuzzy_t.
-     @param x (fuzzy_t) objeto sobre el que se realiza la copía.
+     @brief Constructor de copï¿½a de los objetos fuzzy_t.
+     @param x (fuzzy_t) objeto sobre el que se realiza la copï¿½a.
      */
      fuzzy_t(const fuzzy_t &x);
 
      /**
-     @brief Sobrecarga del operador de asignación que permite realizar la asignación entre
+     @brief Sobrecarga del operador de asignaciï¿½n que permite realizar la asignaciï¿½n entre
             dos objetos de tipo fuzzy_t.
-     @param x (fuzzy_t) objeto del que se desea realizar la copía.
-     @return la copía del objeto fuzzy_t.
+     @param x (fuzzy_t) objeto del que se desea realizar la copï¿½a.
+     @return la copï¿½a del objeto fuzzy_t.
      */
      fuzzy_t &operator=(const fuzzy_t &x);
 
      /**
      @brief Operador que define en un objeto de tipo fuzzy_t una etiqueta.
-     @pre El objeto sobre el que se realiza la asignación debe estar creado.
+     @pre El objeto sobre el que se realiza la asignaciï¿½n debe estar creado.
      @post El contenido anterior del objeto se elimina, para tomar los nuevos valores.
      @param a (real) indica el extremo inferior del trapecio [Posibilidad(a)=0].
      @param b (real) indica el punto centro inferior del trapecio [Posibilidad(b)=1].
@@ -81,7 +81,7 @@ class fuzzy_t {
      @param name (string) nombre de la etiqueta trapezoidal definida.
      @param menos (bool) indica si el extremo inferior de la etiqueta es menos infinito.
             [-inf,-inf,c,d,"name"]
-     @param mas (bool) indica si el extremo superior de la etiqueta es más infinito.
+     @param mas (bool) indica si el extremo superior de la etiqueta es mï¿½s infinito.
             [a,b,+inf,+inf,"name"]
      */
      void Asigna(double a, double b, double c, double d, string name,bool menos,
@@ -91,7 +91,7 @@ bool mas);
      /**
      @brief Operador que define en un objeto de tipo fuzzy_t una etiqueta asumiendo que
             los extremos de la etiqueta no pueden ser +inf y +inf.
-     @pre El objeto sobre el que se realiza la asignación debe estar creado.
+     @pre El objeto sobre el que se realiza la asignaciï¿½n debe estar creado.
      @post El contenido anterior del objeto se elimina, para tomar los nuevos valores.
      @param a (real) indica el extremo inferior del trapecio [Posibilidad(a)=0].
      @param b (real) indica el punto centro inferior del trapecio [Posibilidad(b)=1].
@@ -102,11 +102,11 @@ bool mas);
      void Asigna(double a, double b, double c, double d, string name);
 
      /**
-     @brief Dado un valor real x, devuelve el grado de adaptación de dicho valor a la
+     @brief Dado un valor real x, devuelve el grado de adaptaciï¿½n de dicho valor a la
             etiqueta definida en el objeto fuzzy_t al que se le aplica.
      @pre El objeto debe estar creado.
      @post Elimina el valor anterior del objeto y asigna el nuevo valor.
-     @param x (real) valor sobre el que se desea conocer su grado de adaptaciòn.
+     @param x (real) valor sobre el que se desea conocer su grado de adaptaciï¿½n.
      @return (real) indicando la Poss(x/L).
 
      Calcula la posibilidad de que el valor x pertenezca a la etiqueta definida en el
@@ -123,16 +123,16 @@ bool mas);
      void Poner_Nombre(string name);
 
      /**
-     @brief Saca por la salida estándar la descripción de la etiqueta definida en el
+     @brief Saca por la salida estï¿½ndar la descripciï¿½n de la etiqueta definida en el
             objeto fuzzy_t.
 
 
-     Saca por la salida estándar la descripción de la etiqueta definida en el
+     Saca por la salida estï¿½ndar la descripciï¿½n de la etiqueta definida en el
      objeto fuzzy_t en el formato [a,b,c,d,"name"]. Los puntos a,b,c,d definen el
      trapecio que representa la etiqueta pudiendo ser a y b (-inf) y c y d (+inf).
      */
      void Pinta() const;
-     
+
      string SPinta() const;
 
      void Print() const;
@@ -145,7 +145,7 @@ bool mas);
      fuzzy_t FuzzyLabel() const;
 
      /**
-     @brief Devuelve el valor central del núcleo de la etiqueta difusa.
+     @brief Devuelve el valor central del nï¿½cleo de la etiqueta difusa.
      */
      double CenterLabel() const;
 

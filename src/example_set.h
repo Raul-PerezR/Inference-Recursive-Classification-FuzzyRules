@@ -6,7 +6,7 @@
 
 class example_set {
   private:
-    static const double MISSING = -999999999;
+    static constexpr double MISSING = -999999999;
     int n_example;
     int n_variable;
     double **data;

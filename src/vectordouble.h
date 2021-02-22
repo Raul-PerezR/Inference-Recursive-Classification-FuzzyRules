@@ -3,7 +3,7 @@
 
 class vectordouble{
   private:
-    static const double MISSING=-999999999;
+    static constexpr double MISSING=-999999999;
     int reservado;
     int numero;
     double *data;
