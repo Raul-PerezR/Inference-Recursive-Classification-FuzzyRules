@@ -13,7 +13,7 @@ using namespace std;
 
 void PausaP(){
 	char ch;
-	cout << "Pulsa una tecla para continuar" << endl;
+	cout << "hit a key for continue" << endl;
 	cin >> ch;
 }
 
@@ -451,7 +451,7 @@ void Pattern::Aprendizaje_RecursivoUnEjemplo_WM_TFM_Ruben(const example_set &Es,
 //-----------------------------------------------------------------------------------------------------
 void Pattern::ExtraerPatronesBasicosAproximacionTFMRuben(const example_set &E, const VectorVar &V, TestResult & result, int tries){
 
-  cout << "Estoy en ExtraerPatronesBasicosAproximacionTFMRuben\n" << endl;
+  cout << "Extracting patterns ......\n" << endl;
   // Crear la variable result
   int n_clases = V.SizeDomain(V.Consecuente());
   result.cubiertos.clear();
@@ -594,7 +594,7 @@ void Pattern::ExtraerPatronesBasicosAproximacionTFMRuben(const example_set &E, c
     it++;
   }
 
-	cout << "Patrones: " << diccionario.size() << endl;
+	cout << "Patterns: " << diccionario.size() << endl;
 	/*char ch;
 	cout << "pulsa una tecla" << endl;
 	cin >> ch;*/
@@ -996,7 +996,7 @@ int Pattern::InferenciaRecursivaOptimalizadaConProfundidadLimitada_SalidaPorProf
   int decidirClase = -1;
 	for (int p=0; p<prof; p++){
 		if (decidirClase == -1) decidirClase = clase[p];
-		cout << "umbral " << p << ": " << umbral[p] << " C: " << clase[p] << " -->\t" << estructura[p].first << " , " << estructura[p].second << endl;
+		cout << "Threshold " << p << ": " << umbral[p] << " C: " << clase[p] << " -->\t" << estructura[p].first << " , " << estructura[p].second << endl;
 	}
 	PausaP();
 
@@ -1192,7 +1192,7 @@ void Pattern::TestearRecursivo(const example_set &Es, const VectorVar &V, TestRe
     new_value = 100*i/Es.N_Examples();
     if (new_value != old_value){
       deleteLine2();
-      cout << "(%) Ejemplo " << 1.0*new_value << endl;
+      cout << "(%) example " << 1.0*new_value << endl;
       old_value = new_value;
     }
 		string antecedenteSeleccionado;
@@ -1210,9 +1210,9 @@ void Pattern::TestearRecursivo(const example_set &Es, const VectorVar &V, TestRe
       noCub++;
     }
   }
-  cout << "Aciertos: " << 100*aciertos/Es.N_Examples() << endl;
-  cout << "Aciertos no cubiertos: " << 100*aciertos/(Es.N_Examples()-noCub) << endl;
-  cout << "Porcent no cubiertos: " << 100*noCub/Es.N_Examples() << endl;
+  cout << "Accuracy:              " << 100*aciertos/Es.N_Examples() << endl;
+  cout << "Accuracy on no covers: " << 100*aciertos/(Es.N_Examples()-noCub) << endl;
+  cout << "\% on no covers:       " << 100*noCub/Es.N_Examples() << endl;
 
 
   ProcesarResultados(result);
@@ -1295,67 +1295,6 @@ int Pattern::TesteoDistanciaHamming(const example_set &Es, const VectorVar &V, c
 
 //-----------------------------------------------------------------------------------------------------
 void Pattern::TestearRecursivoVariosDicionarios(const example_set &Es, const VectorVar &V, const Pattern &P3, const VectorVar &V3, const Pattern &P2, const VectorVar &V2, TestResult & result){
-
-  /*int n_clases = V.SizeDomain(V.Consecuente());
-  result.cubiertos.clear();
-  result.no_cubiertos.clear();
-  result.acc.clear();
-  result.error_intrinseco_porClase.clear();
-
-  for (int i=0; i<n_clases; i++){
-    result.cubiertos.push_back(0);
-    result.no_cubiertos.push_back(0);
-    result.acc.push_back(0);
-    result.error_intrinseco_porClase.push_back(0);
-  }
-
-  double aciertos = 0, noCub = 0;
-  cout << endl;
-  int old_value=0, new_value;
-  for (int i=0; i<Es.N_Examples(); i++){
-    string regla="";
-    double umbral = 0.3;
-    int clase_predicha = -1;
-    new_value = 100*i/Es.N_Examples();
-    if (new_value != old_value){
-      deleteLine2();
-      cout << "Procesando Ejemplos " << 1.0*new_value << " %" <<endl;
-      old_value = new_value;
-    }
-		string antecedente1,antecedente2,antecedente3;
-    TestearRecursivoUnEjemplo(Es,V,i,regla,0,1,umbral,clase_predicha, false, antecedente1);
-    //P2.TestearRecursivoUnEjemplo(Es,V2,i,regla,0,1,umbral,clase_predicha);
-    if (clase_predicha == -1){
-      umbral = 0.3;
-      P3.TestearRecursivoUnEjemplo(Es,V3,i,regla,0,1,umbral,clase_predicha, false, antecedente2);
-      if (clase_predicha == -1){
-        umbral = 0.3;
-        P2.TestearRecursivoUnEjemplo(Es,V2,i,regla,0,1,umbral,clase_predicha, false, antecedente3);
-				if (clase_predicha == -1){
-					clase_predicha = P2.TesteoDistanciaHamming(Es, V2, i);
-
-				}
-      }
-    }
-    //char ch;
-    //cin >> ch;
-    int clase_real = Es.Data(i,V.Consecuente());
-    result.cubiertos[clase_real]++;
-    if (clase_predicha==clase_real){
-      result.acc[clase_real]++;
-      aciertos++;
-    }
-    else if (clase_predicha == -1){
-      result.no_cubiertos[clase_real]++;
-      noCub++;
-    }
-  }
-  cout << "Aciertos: " << 100*aciertos/Es.N_Examples() << endl;
-  cout << "Aciertos no cubiertos: " << 100*aciertos/(Es.N_Examples()-noCub) << endl;
-  cout << "Porcent no cubiertos: " << 100*noCub/Es.N_Examples() << endl;
-
-
-  ProcesarResultados(result);*/
 }
 
 
@@ -1544,7 +1483,7 @@ void Pattern::TestearPatronesBasicosClassic(const example_set &Es, const VectorV
   }
 
 
-  cout << "Calculadas clases y pesos\n\n";
+  cout << "Classes and weights calculated\n\n";
   int cl;
 	double percentTestSet = 0.001;  //Porcentaje sobre el total del test sobre el que se está experimentando
 	int nex = Es.N_Examples() * percentTestSet;
@@ -1563,8 +1502,8 @@ void Pattern::TestearPatronesBasicosClassic(const example_set &Es, const VectorV
 		deleteLine2();
 		cout << "\tEx " << portion
 				 << "\%  ETA: " << PonerTiempo2(projeccion/CLOCKS_PER_SEC)
-				 << "   Uno: " << t_uno / CLOCKS_PER_SEC
-				 << "   TiempoTotal: " <<  PonerTiempo2(t_uno * nex/CLOCKS_PER_SEC) << endl;
+				 << "   One: " << t_uno / CLOCKS_PER_SEC
+				 << "   TotalTime: " <<  PonerTiempo2(t_uno * nex/CLOCKS_PER_SEC) << endl;
 
     int clase = Es.Data(i,V.Consecuente());
 		cl = -1;
@@ -1684,8 +1623,8 @@ void Pattern::TestearPatronesBasicosClassicDisparos(const example_set &Es, const
 		deleteLine2();
 		cout << "\tEx " << portion
 				 << "\%  ETA: " << PonerTiempo2(projeccion/CLOCKS_PER_SEC)
-				 << "   Uno: " << t_uno / CLOCKS_PER_SEC
-				 << "   TiempoTotal: " <<  PonerTiempo2(t_uno * nex/CLOCKS_PER_SEC) << endl;
+				 << "   One: " << t_uno / CLOCKS_PER_SEC
+				 << "   TotalTime: " <<  PonerTiempo2(t_uno * nex/CLOCKS_PER_SEC) << endl;
 
     int clase = Es.Data(i,V.Consecuente());
 		cl = -1;
@@ -1725,6 +1664,28 @@ void Pattern::TestearPatronesBasicosClassicDisparos(const example_set &Es, const
 
   ProcesarResultados(result);
 }
+
+//-------------------------------------------------------------------------------------------------
+int Pattern::TestearPatronesBasicosClassicOriginal_UnEjemplo(const example_set &Es, const VectorVar &V, const int eje, const vector<double> &pesoR, const vector<int> &claseR, double &mu, string &antecedente){
+		int cl = -1;
+		mu=0;
+
+		int j=0;
+		for(auto it = diccionario.begin(); it != diccionario.end(); it++, j++){
+			//double adaptAnt = V.Adaptacion(Es.Data(i), it->first, mejorAdapt, pesoR[j]);
+			//double adaptAnt = V.AdaptacionTNormProduct(Es.Data(eje), it->first, mu, pesoR[j]); // Version CON poda
+			double adaptAnt = V.AdaptacionTNormProduct(Es.Data(eje), it->first, 0); // Version SIN poda
+			//adaptAnt = adaptAnt * pesoR[j]; // En la version sin poda no se combina con el peso, por eso esta linea hay que descomentarla en ese caso.
+			if (adaptAnt > mu){
+				mu = adaptAnt;
+				cl = claseR[j];
+				antecedente = it->first;
+			}
+		}
+
+  return cl;
+}
+
 
 
 //-------------------------------------------------------------------------------------------------
@@ -1900,7 +1861,7 @@ double Pattern::InferirDicionario (const example_set &E, const VectorVar &V){
   cout << endl;
   for (int i=0; i<E.N_Examples(); i++){
     deleteLine2();
-    cout << "Ejemplo " << i << "/" << E.N_Examples() << endl;
+    cout << "Example " << i << "/" << E.N_Examples() << endl;
 
     vectordouble w = E.Data(i);
     int clase_orig = E.Data(i,V.Consecuente());
@@ -1915,9 +1876,9 @@ double Pattern::InferirDicionario (const example_set &E, const VectorVar &V){
       errores++;
     }
   }
-  cout << "                 Aciertos: " << 100*aciertos/E.N_Examples()<< endl;
-  cout << "     Porcent No Cubiertos: " << 100*no_cubiertos/E.N_Examples() << endl;
-  cout << " Aciertos sobre Cubiertos: " << 100*aciertos/(E.N_Examples()-no_cubiertos);
+  cout << "                 Accuracy: " << 100*aciertos/E.N_Examples()<< endl;
+  cout << "          \% on no covers: " << 100*no_cubiertos/E.N_Examples() << endl;
+  cout << "    Accuracy on no covers: " << 100*aciertos/(E.N_Examples()-no_cubiertos);
   return aciertos/E.N_Examples();
 }
 

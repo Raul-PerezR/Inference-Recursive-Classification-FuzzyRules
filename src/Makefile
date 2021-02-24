@@ -2,10 +2,10 @@ OBJS = domain_t.o example_set.o fuzzy_t.o variable_t.o vectordouble.o VectorVar.
 
 
 all: $(OBJS)
-	g++ -std=c++14 -fopenmp -fpermissive -O2 -o WyM_Ver $(OBJS)
+	g++ -std=c++14 -w -fopenmp -fpermissive -O2 -o InferStudy $(OBJS)
 
 %.o : %.cpp
-	g++ -std=c++14 -fopenmp -fpermissive -O2 -c $< -o $@
+	g++ -std=c++14 -w -fopenmp -fpermissive -O2 -c $< -o $@
 
 domain_t.o: domain_t.cpp
 example_set.o: example_set.cpp
@@ -17,4 +17,4 @@ prueba.o: prueba.cpp
 patrones.o: patrones.cpp
 
 clean:
-	 rm -f $(OBJS) WyM_Ver
+	 rm -f $(OBJS) InferStudy

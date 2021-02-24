@@ -173,7 +173,7 @@ void domain_t::Asigna_Op_menos(int n, double inf, double sup, bool menosinf, boo
            ancho1=-inf;
          else
            ancho1=(-inf)/(tam_izq-1);
-       } 
+       }
   char aux[80], aux2[10];
   string nom_label;
   int i;
@@ -241,12 +241,12 @@ void domain_t::Asigna(int n, double inf, double sup, bool menosinf, bool masinf,
                    }
                    sprintf(aux,"L0/%i",n-1);
                    label[0].Asigna(rango_inf, rango_inf, rango_inf, rango_inf+ancho,aux,menosinf, false);
-		   
+
                    sprintf(aux,"L%i/%i",n-1,n-1);
                    nom_label=aux;
                   label[n-1].Asigna(rango_sup-ancho, rango_sup, rango_sup, rango_sup, nom_label,false, masinf);
 		  break;
-    // Distribucion a la izquierda  
+    // Distribucion a la izquierda
     case 1: ancho =(sup-inf)/(2*(n-1));
                     for (int i=1; i<n-1; i++){
                        sprintf(aux,"L%i/%i",i,n-1);
@@ -255,15 +255,15 @@ void domain_t::Asigna(int n, double inf, double sup, bool menosinf, bool masinf,
                    }
                    sprintf(aux,"L0/%i",n-1);
                    label[0].Asigna(rango_inf, rango_inf, rango_inf,rango_inf+ancho,aux,menosinf, false);
-		   
+
                    sprintf(aux,"L%i/%i",n-1,n-1);
                    nom_label=aux;
                   label[n-1].Asigna(rango_inf+(ancho*(n-2)),rango_inf+(ancho*(n-1)),rango_sup,rango_sup,nom_label,false, masinf);
 		  break;
-    // Distribucion centrada  
+    // Distribucion centrada
     case 2: ancho =(sup-inf)/(2*(n-1));
                    origen = rango_inf+(sup-inf)/4;
-                   fin = rango_inf+3*((sup-inf)/4);  
+                   fin = rango_inf+3*((sup-inf)/4);
                    for (int i=1; i<n-1; i++){
                        sprintf(aux,"L%i/%i",i,n-1);
                        nom_label=aux;
@@ -275,7 +275,7 @@ void domain_t::Asigna(int n, double inf, double sup, bool menosinf, bool masinf,
                    nom_label=aux;
                   label[n-1].Asigna(fin-ancho,fin,rango_sup,rango_sup,nom_label,false, masinf);
 		  break;
-    // Distribucion a la derecha  
+    // Distribucion a la derecha
     case 3: ancho =(sup-inf)/(2*(n-1));
                   origen = rango_inf+(sup-inf)/2;
                     for (int i=1; i<n-1; i++){
@@ -416,7 +416,7 @@ double domain_t::Adaptacion(double x, string etiquetas) const{
     if (etiquetas[i]=='1'){
       if (mayor==0)
         mayor = label[i].Adaptacion(x);
-      else if (label[i].Adaptacion(x)>0) 
+      else if (label[i].Adaptacion(x)>0)
              mayor=1;
     }
 
@@ -435,7 +435,7 @@ void domain_t::Amplia_Delta(){
 
   label[numero/2].GetDefinicion(a,b,c,d,nombre);
   double crecimiento=(d-c)*0.625;
-   
+
   label[0].GetDefinicion(a,b,c,d,nombre);
   label[0].PutDefinicion(a,b,c+crecimiento,d+crecimiento,nombre);
 
@@ -459,7 +459,7 @@ void domain_t::Amplia_Delta(){
  const double factor=0.25;
 
   double crecimiento;
-   
+
   label[0].GetDefinicion(a,b,c,d,nombre);
   crecimiento=(d-c)*factor;
   label[0].PutDefinicion(a,b,c+crecimiento,d+crecimiento,nombre);
@@ -483,7 +483,7 @@ void domain_t::Amplia_Delta(){
 void domain_t::Reduce_Delta(){
  string nombre;
  double a,b,c,d;
-   
+
   label[numero/2].GetDefinicion(a,b,c,d,nombre);
   double decrecimiento=(d-c)*0.25;
 
@@ -636,6 +636,3 @@ void domain_t::LoadBinaryCode(ifstream &f) {
   for (int i=0; i<numero; i++)
     label[i].LoadBinaryCode(f);
 }
-
-
-

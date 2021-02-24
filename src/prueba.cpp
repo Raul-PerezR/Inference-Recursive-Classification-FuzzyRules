@@ -55,6 +55,39 @@ bool vectoresIguales(double *v1, double *v2, int tama);
 
 
 
+class InputParser{
+       public:
+           InputParser (int &argc, char **argv){
+               for (int i=1; i < argc; ++i)
+                   this->tokens.push_back(std::string(argv[i]));
+           }
+
+           const std::string& getCmdOption(const std::string &option) const{
+               std::vector<std::string>::const_iterator itr;
+               itr =  std::find(this->tokens.begin(), this->tokens.end(), option);
+               if (itr != this->tokens.end() && ++itr != this->tokens.end()){
+                   return *itr;
+               }
+               static const std::string empty_string("");
+               return empty_string;
+           }
+
+           bool cmdOptionExists(const std::string &option) const{
+               return std::find(this->tokens.begin(), this->tokens.end(), option)
+                      != this->tokens.end();
+           }
+       private:
+           std::vector <std::string> tokens;
+};
+
+
+
+
+
+
+
+
+
 double Operacion (double x1, double x2, int op)
 {
     double a;
@@ -2327,7 +2360,8 @@ return salida;
 
 //-----------------------------------------------------------------------------------------------------
 
-vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, example_set & E, const VectorVar &V, int num_par){
+vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, example_set & E, const VectorVar &V, int num_par,
+																																	int model, int d_distance, int NumMaxEvaluatedRules, double percentTestSet){
   vector<TestResult> result, resultRecur;
 	TestResult porDefecto, aux, porDefecto2;
 	VectorVar V2;
@@ -2362,7 +2396,7 @@ vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, e
 		//P2.ExtraerPatronesBasicos(E,V2, porDefecto);
 		//P2.ExtraerPatronesBasicosOriginalWM(E,V2, porDefecto);
 
-		cout << "antes de ejecutar el aprendizaje TFM\n";
+		cout << "Training ....\n";
 		P2.ExtraerPatronesBasicosAproximacionTFMRuben(E,V2, porDefecto, redundancia);
 
 		numeroTotalDePatrones = P2.N_Pattern();
@@ -2463,8 +2497,7 @@ vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, e
 		vector<pair<int,pair <string, double> > >DisparosRecursiva;
 
 		int partes = 1;
-		double percentTestSet = 0.001;  //Porcentaje sobre el total del test sobre el que se está experimentando
-		cout << "Se va a testear sobre el " << 100*percentTestSet*partes << " por ciento del total de ejemplos. Son " << (int) (E_Par_Test.N_Examples()*percentTestSet) << " ejemplos.\n\n";
+		cout << "Testing on " << 100*percentTestSet*partes << " per hundred of total examples. They are  " << (int) (E_Par_Test.N_Examples()*percentTestSet) << " examples.\n\n";
 		long int nex = E_Par_Test.N_Examples()*percentTestSet;
 		long int old_porcion = 0;
 
@@ -2489,41 +2522,42 @@ vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, e
 					deleteLine();
 					cout << "\tEx " << portion
 					     << "\%  ETA: " << PonerTiempo(projeccion/CLOCKS_PER_SEC)
-							 << "   Uno: " << t_uno / CLOCKS_PER_SEC
-							 << "   TiempoTotal: " <<  PonerTiempo(t_uno * (t+1)*nex/CLOCKS_PER_SEC) << endl;
+							 << "   One: " << t_uno / CLOCKS_PER_SEC
+							 << "   TotalTime: " <<  PonerTiempo(t_uno * (t+1)*nex/CLOCKS_PER_SEC) << endl;
 					old_porcion = porcion;
 					t_salidas += (b - clock());
 				}
 
 				string regla="";
 		    double umbral = 0.0;
-				int NumMaxEvaluatedRules=1024;  // Numero de reglas de la base de reglas encontrada
 		    int clase_predicha = -1;
 				bool PCF = true;
 				double grado = 0;
 				string antecedenteSeleccionado = "-";
 				step_begin = clock();
 
+				switch (model) {
+					case 1: clase_predicha = Patrones2.TestearPatronesBasicosClassicOriginal_UnEjemplo(E_Par_Test,V2,i,pesoR,claseR, grado,antecedenteSeleccionado);
+						      break;
+					case 2: clase_predicha = Patrones2.TestearPatronesBasicosClassic_UnEjemplo(E_Par_Test,V2,i,pesoR,claseR, grado,antecedenteSeleccionado);
+						      break;
+				  case 3: Patrones2.TestearRecursivoUnEjemplo(E_Par_Test, V2, i, regla, 0, 1, umbral, clase_predicha, PCF, antecedenteSeleccionado, NumMaxEvaluatedRules);
+								  grado = umbral;
+									break;
+					case 4: clase_predicha = Patrones2.InferenciaRecursivaOptimalizada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado, NumMaxEvaluatedRules);
+					        break;
+					case 5: clase_predicha = Patrones2.InferenciaRecursivaOptimalizadaConProfundidadLimitada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado,d_distance);
+								  break;
+					case 6: if (clase_predicha == -1)
+										clase_predicha = Patrones2.InferenciaRecursivaOptimalizadaConProfundidadLimitada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado,d_distance);
+										if (clase_predicha == -1)
+											clase_predicha = Patrones2.InferenciaRecursivaOptimalizada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado, NumMaxEvaluatedRules);
+										if (clase_predicha == -1)
+					  					clase_predicha = Patrones2.TestearPatronesBasicosClassic_UnEjemplo(E_Par_Test,V2,i,pesoR,claseR, grado,antecedenteSeleccionado);
+									break;
+				}
 
-				//------------------------ Version Beam ------------
-				int DistanciaHamming = 2;
-				if (clase_predicha == -1)
-				clase_predicha = Patrones2.InferenciaRecursivaOptimalizadaConProfundidadLimitada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado,DistanciaHamming);
-				//------------------------ TFM Ruben ---------------
-				if (clase_predicha == -1)
-				clase_predicha = Patrones2.InferenciaRecursivaOptimalizada(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado, NumMaxEvaluatedRules);
 
-				//------------------------ Inferencia clasica ------
-				if (clase_predicha == -1)
-  			clase_predicha = Patrones2.TestearPatronesBasicosClassic_UnEjemplo(E_Par_Test,V2,i,pesoR,claseR, grado,antecedenteSeleccionado);
-
-				//------------------------ Congreso ----------------
-				//Patrones2.TestearRecursivoUnEjemplo(E_Par_Test, V2, i, regla, 0, 1, umbral, clase_predicha, PCF, antecedenteSeleccionado, NumMaxEvaluatedRules); grado = umbral;
-
-
-
-        //------------------------ Prueba de sacar las salida por vecindarios
-				//clase_predicha = Patrones2.InferenciaRecursivaOptimalizadaConProfundidadLimitada_SalidaPorProfundidades(E_Par_Test,V2,i,PCF,grado,antecedenteSeleccionado,DistanciaHamming);
 				step_end = clock();
 				step = step_end - step_begin;
 				inicio_trozos += step;
@@ -2552,105 +2586,17 @@ vector<vector<double> > CalculoEstimadoSobrePatronesConNEtiquetas(int nlabels, e
 			timePorcion = 1.0*(clock() - timePorcion);
 			ProcesarResultados(resultRecur[par]);
 			fstream f;
-			f.open("patrBasicos.csv", std::fstream::out | std::fstream::app);
-
-			f << "\tPart: " << par << " Iter: " << t << " hasta: " << (t+1)*nex-1
-		 	  << " Acc: "<< resultRecur[par].acierto_global << " AccSNC: " << resultRecur[par].acierto_sinNoCubiertos
-			     << " err_int: " << resultRecur[par].error_intrinseco << " NewPattern: " << resultRecur[par].porcentaje_nuevos_patrones
-					 << " tiempo: " << (1.0*timePorcion)/CLOCKS_PER_SEC << endl;
-
-			f.close();
 			cout << endl;
 
     }
 		fin = clock();
 		timetestR += fin - inicio;
 		timetestC += inicio_trozos;
-		//timetestR = timetestR - t_salidas;
-
-
-		/*cout << "Resultado Inferencia Recursiva " << E_Par_Test.N_Examples() << endl;
-		for (int t=0; t<DisparosRecursiva.size(); t++){
-			cout << "(" <<t<<")\t"<<DisparosRecursiva[t].first<<"("<< DisparosRecursiva[t].second.first<<") --> " << DisparosRecursiva[t].second.second<<endl;
-		}*/
-
-		//t_salidas = 0;
-    //inicio = clock();
-		// Inferencia clasica    Si se descomenta (A) es suficiente con poner un /* en la siguiente linea
-		// =========================================== INFERENCIA CLASICA =================================================
-		//Patrones2.TestearPatronesBasicosClassic(E_Par_Test, V2, result[par]);
-		//vector<pair<int,pair <string, double> > >DisparosClasica;
-		//Patrones2.TestearPatronesBasicosClassicDisparos(E_Par_Test, V2, result[par], DisparosClasica);
-
-		//fin = clock();
-		//timetestC += fin - inicio;
-		//timetestC = timetestC - t_salidas;
-
-		//cout << "Resultado Inferencia Clasica " << E_Par_Test.N_Examples() << endl;
-		//for (int t=0; t<DisparosClasica.size(); t++){
-		//	cout << "(" <<t<<")\t"<<DisparosClasica[t].first<<"("<< DisparosClasica[t].second.first<<") --> " << DisparosClasica[t].second.second<<endl;
-		//}
-
-
-    /*cout << "Comparando las dos inferencias" << endl;
-		double igual_clase_i=0;
-		double igual_adaptacion_i=0;
-		double igual_regla_i=0;
-		for (int t=0; t<E_Par_Test.N_Examples(); t++){
-			if (DisparosRecursiva[t].first == DisparosClasica[t].first){
-				igual_clase_i++;
-			}
-			if (DisparosRecursiva[t].second.first == DisparosClasica[t].second.first){
-				igual_regla_i++;
-				//cout << "(" <<t<<")\t"<<"("<< DisparosClasica[t].second.first<<") ("<< DisparosRecursiva[t].second.first<<")"<<endl;
-			}
-			if (fabs(DisparosRecursiva[t].second.second - DisparosClasica[t].second.second)<0.0000001){
-				//cout << "(" <<t<<")\t"<<DisparosClasica[t].first<<" | "<< DisparosRecursiva[t].first << endl;
-				igual_adaptacion_i++;
-			}
-			//if (fabs(DisparosRecursiva[t].second.second - DisparosClasica[t].second.second)>=0.0000001){
-			//	cout << "(" <<t<<")\t"<<DisparosClasica[t].second.second<<" | "<< DisparosRecursiva[t].second.second << endl;
-			//}
-		}
-		cout << "\tMisma Clase: " << (igual_clase_i*100/E_Par_Test.N_Examples()) << "\%  Misma Regla: " << (igual_regla_i*100/E_Par_Test.N_Examples()) << "\%  Misma Adapt: " << (igual_adaptacion_i*100/E_Par_Test.N_Examples()) << "\%" <<endl;
-    igual_clase += igual_clase_i*100/E_Par_Test.N_Examples();
-		igual_adaptacion += igual_adaptacion_i*100/E_Par_Test.N_Examples();
-		igual_regla += igual_regla_i*100/E_Par_Test.N_Examples();
-
-
-    {cout << "Pulsa un tecla para continuar\n";char ch; cin >> ch;}
-    */
 
 		ProcesarResultados(resultRecur[par]);
 		PintaResultadosTest(resultRecur[par], true);
-		/*cerr << "% Acierto Test (Global) : " << result[par].acierto_global << endl;
-		cerr << "% nuevos patrones Test  : " << result[par].porcentaje_nuevos_patrones << endl;
-		cerr << "% Test sin nocubiertos  : " << result[par].acierto_sinNoCubiertos << endl;
-		cerr << "%Error intrinseco       : " << result[par].error_intrinseco << endl;
-		cerr << endl;*/
-		//Pausa();
 }
 
-	/*cerr << endl;
-
-	cerr << "Numero medio de Ejemplos: " << SumReSult[11] << endl;
-	cerr << "Numero medio de Patrones: " << SumReSult[0] << endl;
-	cerr << "         Mayoria Clase 0: " << SumReSult[6] << endl;
-	cerr << "                  Empate: " << SumReSult[8] << endl;
-	cerr << "         Mayoria Clase 1: " << SumReSult[7] << endl;
-	cerr << "Maxima Redundancia      : " << SumReSult[9] << endl;
-	cerr << "Media ejemplos/patron   : " << SumReSult[11]/SumReSult[0] << endl;
-	cerr << "Mediana Redundancia     : " << SumReSult[10] << endl;
-	cerr << "Patrones con 1 ejemplo  : " << SumReSult[3] << endl;
-	cerr << "Patrones de 1 sola clase: " << SumReSult[1] << endl;
-	cerr << "Media Train sólo 1 clase: " << SumReSult[4] << endl;
-	cerr << "Media Train clase mayor : " << SumReSult[5] << endl;
-	cerr << "% Acierto Test (Global) : " << SumReSult[13] << endl;
-	cerr << "% nuevos patrones Test  : " << SumReSult[12] << endl;
-	cerr << "% Test sin nocubiertos  : " << SumReSult[14] << endl;
-	cerr << "%Error intrinseco       : " << 100 -SumReSult[14] << endl;
-	cerr << endl;
-*/
 
 cerr << "\n\t------------------ Media Test -----------" << endl;
 TestResult aux2;
@@ -2931,11 +2877,98 @@ return salida;
 
 
 
+void MensajeAyuda(){
+  cout << "Sintaxis:\n";
+  cout << " InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>] \n";
+  cout << "Parámetros: \n";
+  cout << "\t -e  <path/seed problem> directory path of the problem and seed of the files \n";
+	cout << "\t -model <num> to select the inference model:\n";
+	cout << "\t\t1\tStandard Inference\n";
+	cout << "\t\t2\tStandard Inference Prunned\n";
+	cout << "\t\t3\tNeighborhood Inference\n";
+	cout << "\t\t4\tHeuristic Neighborhood Inference\n";
+	cout << "\t\t5\tHeuristic Nearby Neighborhood Inference\n";
+	cout << "\t\t6\tHybrid Inference\n";
+  cout << "\t -nlabel <num> number of labels used by discretize continuous variable. By default nlabel = 2  \n";
+  cout << "\t -sd <num> seed for the random number generator. By default sd = 0 \n";
+	cout << "\t -d <num> when model 5 or 6 is selected, this parameter establishes the maximum distance with the center rule. By default d = 0 \n";
+	cout << "\t -maxrules <num> when model 3, 4, 5 or 6 is selected, this parameter fixes the limit in the number of rule for explored. By default maxrules = 1024\n";
+	cout << "\t -PerCentOnTest <real_num> establishes de percentage of the examples from the test set on which the inference is applied. By default PerCentOnTest = 1.0\n";
+}
+
+
+
+
+
 
 
 
 int main(int argc, char *argv[])
 {
+
+	InputParser input(argc, argv); // Para capturar las entradas
+
+
+  // Captura de los parámetros de entrada al programa
+	if(input.cmdOptionExists("-h")){
+    MensajeAyuda();
+    exit(0);
+  }
+
+	string aux;
+	// ficheros y semilla del problema
+	string fichname;
+	fichname = input.getCmdOption("-e");
+  if (fichname.empty()){
+    cout << "ERROR: path and seed of the problem is not defined\n\n";
+    MensajeAyuda();
+    exit(0);
+  }
+
+	// Seleccionar el modelo de inferencia
+	int model = -1;
+  aux = input.getCmdOption("-model");
+  if (!aux.empty()) model = atoi(aux.c_str());
+	else {
+		cout << "ERROR: a inference model must be indicated.\n\n";
+		MensajeAyuda();
+    exit(0);
+	}
+	if (model <0 or model >6){
+		cout << "ERROR: model value must be in {1,6}.\n\n";
+		MensajeAyuda();
+    exit(0);
+	}
+
+
+  // Número de etiquetas
+	int nLab = 2;
+  aux = input.getCmdOption("-nlabel");
+  if (!aux.empty()) nLab = atoi(aux.c_str());
+
+
+  // Semilla generador de números aleatorios
+	int seed = 0;
+  aux = input.getCmdOption("-sd");
+  if (!aux.empty()) seed = atoi(aux.c_str());
+
+	// parametro de distancia para el algoritmo 5
+	int d_distance = 0;
+  aux = input.getCmdOption("-d");
+  if (!aux.empty()) d_distance = atoi(aux.c_str());
+
+	// Valor de maxrules en los algoritmos recursivos
+	int maxrules = 1024;
+  aux = input.getCmdOption("-maxrules");
+  if (!aux.empty()) maxrules = atoi(aux.c_str());
+
+	double percentTestSet = 1.0;
+	aux = input.getCmdOption("-PerCentOnTest");
+  if (!aux.empty()) percentTestSet = atof(aux.c_str());
+
+
+
+  // Inicio del proceso
 
 	for (char i=0; i<10; i++){
 		simbolo.push_back('0'+i);
@@ -2951,63 +2984,37 @@ int main(int argc, char *argv[])
 	}
 
 
-	if (argc < 2)
-	{
-		cout << "Number of parameters incorrect....\n";
-		cout << "Sintaxis:\n";
-		cout << "aprendizajegenetico <semilla_problema>\n";
-		cout << "       or\n";
-		cout << "aprendizajegenetico <semilla_problema> implicity\n\n";
-		exit(1);
-	}
-
 	// Numero de particiones
 	int num_par=10;
 
-	string fichname, fich_extension, comando;
+	string fich_extension, comando;
 
-	fichname = argv[1];
 	fich_extension = fichname;
 	fich_extension = fich_extension + ".dom";
 	VectorVar V(fich_extension.c_str());
 	example_set E;
-	int seed = 0;
-	int nLab = 2;
 
-	if (argc==2)
+	int item_par=0;
+	fich_extension = fichname;
+	comando="0";
+	comando[0]=comando[0]+item_par;
+	fich_extension = fich_extension+comando;
+	fich_extension = fich_extension+".datos";
+	int x = 0;
+	cout << "loading data file ..." << endl;
+	while (Existe(fich_extension))
 	{
-		fich_extension = fichname;
-		fich_extension = fich_extension + ".datos";
-		E.AddExampleFich(fich_extension.c_str(),1,1);
-	}
-	else if (argc>=3)
-	{
-		seed = atoi(argv[2]);
-		int item_par=0;
+		E.AddExampleFich(fich_extension.c_str(),item_par,x); // Ultimo componente false=orden original, true=orden aleatorio
+		cout << "...... loading " << fich_extension << endl;
+		item_par++;
 		fich_extension = fichname;
 		comando="0";
 		comando[0]=comando[0]+item_par;
 		fich_extension = fich_extension+comando;
 		fich_extension = fich_extension+".datos";
-		int x = 0;
-		if (argc > 3) {
-			nLab = atoi(argv[3]);
-		}
-		cout << "loading data file ..." << endl;
-		while (Existe(fich_extension))
-		{
-			E.AddExampleFich(fich_extension.c_str(),item_par,x); // Ultimo componente false=orden original, true=orden aleatorio
-			cout << "...... loading " << fich_extension << endl;
-			item_par++;
-			fich_extension = fichname;
-			comando="0";
-			comando[0]=comando[0]+item_par;
-			fich_extension = fich_extension+comando;
-			fich_extension = fich_extension+".datos";
-		}
-		num_par=item_par;
-		//E.OrderByClass(1, V.Consecuente());
 	}
+	num_par=item_par;
+	//E.OrderByClass(1, V.Consecuente());
 
 	cout << "Loading process finished ..." << endl;
 	fichname = extract_noun(fichname);
@@ -3022,7 +3029,6 @@ int main(int argc, char *argv[])
 	string ext2=".rules";
 	string nomfich, nomfich2, nomfich3;
 
-	if (argc==2)
 	E.Generate_Partitions(num_par);
 
 
@@ -3067,7 +3073,7 @@ int main(int argc, char *argv[])
 			//salida = CalculoEstimadoSobrePatrones3(E, V,  num_par);
 
 	    int numLabel = nLab;
-			salida = CalculoEstimadoSobrePatronesConNEtiquetas(numLabel, E, V, num_par);
+			salida = CalculoEstimadoSobrePatronesConNEtiquetas(numLabel, E, V, num_par, model, d_distance, maxrules, percentTestSet);
 
 
 			for (int j=0; j<salida.size(); j++){

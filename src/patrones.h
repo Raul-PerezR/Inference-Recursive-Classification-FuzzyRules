@@ -107,6 +107,7 @@ public:
   int TesteoDistanciaHamming(const example_set &Es, const VectorVar &V, const int eje);
   void TestearRecursivoVariosDicionarios(const example_set &Es, const VectorVar &V, const Pattern &P3, const VectorVar &V3, const Pattern &P2, const VectorVar &V2, TestResult & result);
 
+  int TestearPatronesBasicosClassicOriginal_UnEjemplo(const example_set &Es, const VectorVar &V, const int eje, const vector<double> &pesoR, const vector<int> &claseR, double &mu, string &antecedente);
   int TestearPatronesBasicosClassic_UnEjemplo(const example_set &Es, const VectorVar &V, const int eje, const vector<double> &pesoR, const vector<int> &claseR, double &mu, string &antecedente);
   void TestearPatronesBasicosClassic(const example_set &Es, const VectorVar &V, TestResult & result);
   void TestearPatronesBasicosClassicDisparos(const example_set &Es, const VectorVar &V, TestResult & result, vector<pair<int, pair <string, double> > > &disparos);
