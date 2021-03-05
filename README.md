@@ -44,7 +44,7 @@ Result of 10 cross-validation on the *sonar* database using the *Hybrid Inferenc
 The *kddcup*, *susy*, *higgs* and *hepmass* databases have not been included in this repository due to their excessive size. You can contact us to obtain these databases just as they were used for this experimentation.
 
 ### Obtaining Table 2: Results on training sets
-The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database `-model 1 -nlabel 5 -PerCentOnTest 0`. 
+The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter `-PerCentOnTest 0 `. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database `-model 1 -nlabel 5 -PerCentOnTest 0`. 
 
 By example, for *census* database it will be `./InferStudy -e ../databases/census/census -model 4 -nlabel 5 -PerCentOnTest 0`.
 
@@ -59,5 +59,6 @@ By example, for *census* database (and the rest of databases except *higgs* and 
 In the case of algorithms 3 and 4, the way to call them and modify the script is the same as described for algorithm 2, including the same exceptions on the *higgs* and *hepmass* databases. The only difference is that in algorithm 3 the value 3 is associated to the parameter *model* and in algorithm 4 the value 4.
 
 ### Obtaining Table 9: Results on Algorithm 5 with different values of distance
+Table 9 shows the results of a modification of Algorithm 4 where the space where the best rule is searched in the neighborhood of the example is restricted. The values 0,1,2,3,5 have been considered for this distance parameter. In this case, the script must be invoked 5 times, changing in each case the value associated to the parameter `-d` from 0 to 5 without considering the 4. Thus, for all the databases, and distance 0, this will be the way to invoke `-model 5 -nlabel 5 -d 0`.
 
-
+In the same way, just replace the 0 of the parameter `-d` by a value in {1,2,3,5} to obtain the result with the changed distance.  To these parameters, in the case of *higgs* and *hepmas* it is necessary to add the parameter `-PerCentOnTest 0.001`.
