@@ -15,12 +15,12 @@ Sintax:
 Parameters: 
 * -e  <path/seed problem> directory path of the problem and seed of the files 
 * -model <num> to select the inference model:
-** 1	Standard Inference
-** 2	Standard Inference Prunned
-** 3	Neighborhood Inference
-** 4	Heuristic Neighborhood Inference
-** 5	Heuristic Nearby Neighborhood Inference
-** 6	Hybrid Inference
+  * 1	Standard Inference
+  * 2	Standard Inference Prunned
+  * 3	Neighborhood Inference
+  * 4	Heuristic Neighborhood Inference
+  * 5	Heuristic Nearby Neighborhood Inference
+  * 6	Hybrid Inference
 * -nlabel <num> number of labels used by discretize continuous variable. By default nlabel = 2  
 * -sd <num> seed for the random number generator. By default sd = 0 
 * -d <num> when model 5 or 6 is selected, this parameter establishes the maximum distance with the center rule. By default d = 0 
