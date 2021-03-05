@@ -43,5 +43,5 @@ Result of 10 cross-validation on the *sonar* database using the *Hybrid Inferenc
 ## Using script *Launch_all.sh* for replicating the experimentation
 The *kddcup*, *susy*, *higgs* and *hepmass* databases have not been included in this repository due to their excessive size. You can contact us to obtain these databases just as they were used for this experimentation.
 
-### Table 2: Result on training sets
-* The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database -model 1 -nlabel 5 -PerCentOnTest 0.
+### Obtaining Table 2: Results on training sets
+* The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database `-model 1 -nlabel 5 -PerCentOnTest 0`.
