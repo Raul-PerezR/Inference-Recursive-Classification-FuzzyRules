@@ -31,13 +31,17 @@ Parameters:
 ## Some examples
 
 ##### ./InferStudy -e ../databases/texture/texture -model 1 -nlabel 5
-Result of 10 cross-validation on the *texture* database using the *Standard Inference* and 5 uniformly distributed labels cut at 0.5 over the universe of discourse of continuous variables.
+Result of 10 cross-validation on the *texture* database using the *Standard Inference* and 5 uniformly distributed labels cutoff at 0.5 over the universe of discourse of continuous variables.
 
 ##### ./InferStudy -e ../databases/census/census -model 4 -nlabel 5 -maxrules 1024
-Result of 10 cross-validation on the *census* database using the *Neighborhood Inference Heuristic* and 5 uniformly distributed labels cut at 0.5 over the universe of discourse of continuous variables and setting the parameter on the maximum number of rule to search in the example neighbor to 2^10 = 1024.
+Result of 10 cross-validation on the *census* database using the *Neighborhood Inference Heuristic* and 5 uniformly distributed labels cutoff at 0.5 over the universe of discourse of continuous variables and setting the parameter on the maximum number of rule to search in the example neighbor to 2^10 = 1024.
 
 
 ##### ./InferStudy -e ../databases/sonar/sonar -model 6 -nlabel 3 -maxrules 1024 -d 2
-Result of 10 cross-validation on the *sonar* database using the *Hybrid Inference* and 3 uniformly distributed labels cut at 0.5 over the universe of discourse of continuous variables and setting the parameter on the maximum number of rule to search in the example neighbor to 2^10 = 1024 and setting the parameter on the distance on the center rules to 2.
+Result of 10 cross-validation on the *sonar* database using the *Hybrid Inference* and 3 uniformly distributed labels cutoff at 0.5 over the universe of discourse of continuous variables and setting the parameter on the maximum number of rule to search in the example neighbor to 2^10 = 1024 and setting the parameter on the distance on the center rules to 2.
 
 ## Using script *Launch_all.sh* for replicating the experimentation
+The *kddcup*, *susy*, *higgs* and *hepmass* databases have not been included in this repository due to their excessive size. You can contact us to obtain these databases just as they were used for this experimentation.
+
+### Table 2: Result on training sets
+* The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database -model 1 -nlabel 5 -PerCentOnTest 0.
