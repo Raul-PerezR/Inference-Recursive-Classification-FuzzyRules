@@ -4,6 +4,7 @@ Software used at work "Use of search techniques to define efficient inference mo
 ## How to compile?
 
 cd src
+
 make
 
 ## How to run?
