@@ -44,4 +44,20 @@ Result of 10 cross-validation on the *sonar* database using the *Hybrid Inferenc
 The *kddcup*, *susy*, *higgs* and *hepmass* databases have not been included in this repository due to their excessive size. You can contact us to obtain these databases just as they were used for this experimentation.
 
 ### Obtaining Table 2: Results on training sets
-* The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database `-model 1 -nlabel 5 -PerCentOnTest 0`.
+The results shown for the training phase are common to all the models studied. For that reason, it is the same on which inference model is run and the process is faster if inference is not done on the test set. Therefore, we set the parameter *PerCentOnTest* to 0. Thus, the results shown in Table 2 can be obtained by running the script setting as parameters after each database `-model 1 -nlabel 5 -PerCentOnTest 0`. 
+
+By example, for *census* database it will be `./InferStudy -e ../databases/census/census -model 4 -nlabel 5 -PerCentOnTest 0`.
+
+
+### Obtaining results of Algorithm 2 for Tables 3,4,5,6,7 and 8
+`-model 2 -nlabel 5` are the parameters for all databases except by *higgs* and *hepmass*. In the last two cases we must to include the PerCentOnTest parameter with 0.001 value.
+
+By example, for *census* database (and the rest of databases except *higgs* and *hepmass*), we will use `./InferStudy -e ../databases/census/census -model 2 -nlabel 5`. In the case of *higgs* and *hepmass*, we will use  `./InferStudy -e ../databases/higgs/higgs -model 2 -nlabel 5 -PerCentOnTest 0.001` and `./InferStudy -e ../databases/higgs/higgs -model 2 -nlabel 5 -PerCentOnTest 0.001`.
+
+
+### Obtaining results of Algorithm 3 and 4 for Tables 3,4,5,6,7 and 8
+In the case of algorithms 3 and 4, the way to call them and modify the script is the same as described for algorithm 2, including the same exceptions on the *higgs* and *hepmass* databases. The only difference is that in algorithm 3 the value 3 is associated to the parameter *model* and in algorithm 4 the value 4.
+
+### Obtaining Table 9: Results on Algorithm 5 with different values of distance
+
+
