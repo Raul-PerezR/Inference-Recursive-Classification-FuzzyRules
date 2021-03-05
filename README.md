@@ -10,7 +10,7 @@ make
 
 Sintax:
 
- _InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>]_
+> *InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>]*
   
 Parameters: 
 	 -e  <path/seed problem> directory path of the problem and seed of the files 
