@@ -9,6 +9,7 @@ make
 ## Sintax program?
 
 Sintax:
+
  InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>] 
   
 Parameters: 
