@@ -7,4 +7,5 @@ cd src
 
 make
 
+asdfasdf asdfasdfa
 
