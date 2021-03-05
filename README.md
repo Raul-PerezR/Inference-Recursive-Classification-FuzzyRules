@@ -70,6 +70,6 @@ Only 16 of the 50 databases are used in that part of the paper. You could commen
 
 ### Obtaining Table 11: Results on Algorithm 6
 
-In a similar way of have been described in the previous section, only 16 of the 50 databases are used in this part. You could put like comments those databases non-used. 
+Similarly as described in the previous section, only 16 of the 50 databases have been used in this part. You could put in comment in the script those unused databases.
 
-The way to invoke this version is a combination of algorithm 4 and 5. For this reason, parameters `maxrules` and `d` are used. The general modification on the script for each databases (after the fix the database with `-e` parameter) is 
+The way to invoke this version is a combination of the invocation between algorithms 4 and 5. For this reason, both the `-maxrules` and `-d` parameters are used. The general modification in the script for each database (and after setting with the `-e` parameter the database) is `-model 6 -nlabel 5 -maxrules 1024 -d 2`.As in all previous cases, for the *higgs* and *hepmass* databases `-PerCentOnTest 0.001` must be added.
