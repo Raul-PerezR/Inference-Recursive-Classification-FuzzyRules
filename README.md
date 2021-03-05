@@ -13,9 +13,9 @@ Sintax:
 ### InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>]
   
 Parameters: 
-* -e  <path/seed problem> directory path of the problem and seed of the files 
-* -model <num> to select the inference model:
-  * 1	Standard Inference
+   -e  <path/seed problem> directory path of the problem and seed of the files 
+   -model <num> to select the inference model:
+    1	Standard Inference
   * 2	Standard Inference Prunned
   * 3	Neighborhood Inference
   * 4	Heuristic Neighborhood Inference
