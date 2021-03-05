@@ -10,7 +10,7 @@ make
 
 Sintax:
 
-### InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>]
+##### InferStudy -e <path/seed problem> -model <num> [-nlabel <num>] [-sd <num>] [-d <num>] [-maxrules <num>] [-PerCentOnTest <real_num>]
   
 Parameters: 
 * -e  <path/seed problem> directory path of the problem and seed of the files 
@@ -30,5 +30,5 @@ Parameters:
 
 ## Some examples
 
-### ./InferStudy -e ../databases/census/census -model 4 -nlabel 5 -maxrules 1024
+##### ./InferStudy -e ../databases/census/census -model 4 -nlabel 5 -maxrules 1024
 Result of the 10-crossvalidation on census database using the *Heuristic Neighborhood Inference* and 5 labes uniformely distributed and cutting in 0.5 on the universe of discurse of continuous variables and fixing the parameter about the number maximun of rule to search in the neighbor of the example to 2^10 = 1024.
