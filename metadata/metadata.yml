@@ -1,0 +1,26 @@
+metadata_version: 1
+name: Inference Recursive Classification Fuzzy Rule Capsule
+description: This software was used in the paper "Efficient inference models for classification problems with a high number of fuzzy rules" for being published in Applied Soft Computing Journal. This software implements the traditional methods of the "winner rule" for inferring on a fuzzy rule sets. These methods have a good performance when the number of rules in the knowledge base is reduced. However, when the number is rule is large, the time consumed for the inference process could be excessive. This software implements alternative methods of inference (based on a recursive strategy)  when there is too many rules in the rule set. The study of the performance of all this versions is shown in that paper.
+tags:
+- Inference
+- Fuzzy Rule
+- Big Data
+authors:
+- name: Raúl Pérez
+  affiliations:
+  - name: Universidad de Granada
+- name: A.Gonzalez
+  affiliations:
+  - name: Universidad de Granada
+- name: Leonardo Jara
+  affiliations:
+  - name: Universidad de Granada
+- name: Rubén Ariza-Valderrama
+  affiliations:
+  - name: Universidad de Granada
+- name: Juan Fernández-Olivares
+  affiliations:
+  - name: Universidad de Granada
+corresponding_contributor:
+  name: Raúl Pérez
+  email: fgr@decsai.ugr.es
