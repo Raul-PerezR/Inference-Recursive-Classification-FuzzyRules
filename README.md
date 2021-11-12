@@ -7,6 +7,8 @@ cd code
 
 make
 
+cd ../bin
+
 ## How to run?
 
 Sintax:
